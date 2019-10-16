@@ -4,8 +4,8 @@ pkgver=0.12.0.r4.e1317cb
 pkgrel=1
 makedepends=('rust' 'cargo')
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
-url="https://github.com/Siborgium/rip"
-source=("$pkgname::git+https://github.com/Siborgium/rip")
+url="https://github.com/nivekuil/rip"
+source=("$pkgname::git+https://github.com/nivekuil/rip")
 sha1sums=('SKIP')
 license=('GPL-3.0+')
 
