@@ -254,12 +254,18 @@ Send files to the graveyard (/tmp/graveyard-$USER by default) instead of unlinki
                         dest
                     }
                 };
-
-                bury(source, dest).or_else(|e| {
-                        fs::remove_dir_all(dest).is_ok();
-                        Err(e)
-                    })
-                    .chain_err(|| "Failed to bury file")?;
+                bury(source,dest)
+                    .chain_err(|| "Failed to bury file")
+                    .map_err(|e|{
+                        if dest.exists() {
+                            if let Err(ee) = fs::remove_dir_all(dest) {
+                                let err = format!("Failed to cleanup after failed bury: {}", ee);
+                                return e.chain_err(|| err);
+                            }
+                        }
+                        e
+                    })?;
+                
                 // Clean up any partial buries due to permission error
                 write_log(source, dest, record)
                     .chain_err(|| format!("Failed to write record at {}", record.display()))?;
